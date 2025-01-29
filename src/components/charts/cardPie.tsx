@@ -9,13 +9,16 @@ import {
 import PieChartComponent from "./pie";
 import { Button } from "../ui/button";
 import { Bookmark, RotateCcw } from "lucide-react";
+import { Birads } from "@/lib/type";
 
 export default function CardPie({
   onAgain,
   action = false,
+  data,
 }: {
   onAgain?: () => void;
   action?: boolean;
+  data: Birads[];
 }) {
   return (
     <Card>
@@ -24,11 +27,9 @@ export default function CardPie({
         <CardDescription>Prediction of mammogram images</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-w justify-evenly">
-        {Array(4)
-          .fill(null)
-          .map((d, i) => (
-            <PieChartComponent key={i} />
-          ))}
+        {data?.map((d, i) => (
+          <PieChartComponent chartData={d} key={i} imgIdx={i + 1} />
+        ))}
       </CardContent>
       {action && (
         <CardFooter className="justify-end gap-2">

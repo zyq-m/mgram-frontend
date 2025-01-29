@@ -40,3 +40,20 @@ export type NavLinkProps = {
     url: string;
   }[];
 };
+
+export type UploadFiles = {
+  preview?: string;
+  name?: string;
+};
+
+export type Birads = {
+  name: string;
+  prediction: PieBiards[];
+  highest: number;
+};
+
+export type PieBiards = {
+  birad: string;
+  accuracy: number;
+  fill?: string;
+};

@@ -1,12 +1,39 @@
 import { Image } from "lucide-react";
 import DropzoneComponent from "react-dropzone";
 import MamoImages from "./images";
+import { useEffect, useState } from "react";
+import { UploadFiles } from "@/lib/type";
 
-export default function Dropzone() {
+export default function Dropzone({
+  sendFiles,
+}: {
+  sendFiles: (files: File[]) => void;
+}) {
+  const [files, setFiles] = useState<(File & UploadFiles)[] | []>([]);
+
+  useEffect(() => {
+    if (files.length) {
+      sendFiles(files);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files]);
+
   return (
-    <div className="space-y-3">
-      <DropzoneComponent>
-        {({ getRootProps, getInputProps }) => (
+    <DropzoneComponent
+      accept={{ "image/jpeg": [".jpeg", ".jpg"] }}
+      onDrop={(acceptedFiles) => {
+        setFiles((prev) => [
+          ...prev,
+          ...acceptedFiles.map((file) =>
+            Object.assign(file, {
+              preview: URL.createObjectURL(file),
+            }),
+          ),
+        ]);
+      }}
+    >
+      {({ getRootProps, getInputProps }) => (
+        <div className="space-y-3">
           <section className="grid place-items-center border-2 rounded-lg border-dashed h-64">
             <div {...getRootProps()}>
               <input {...getInputProps()} />
@@ -16,9 +43,9 @@ export default function Dropzone() {
               </div>
             </div>
           </section>
-        )}
-      </DropzoneComponent>
-      <MamoImages />
-    </div>
+          <MamoImages files={files} />
+        </div>
+      )}
+    </DropzoneComponent>
   );
 }

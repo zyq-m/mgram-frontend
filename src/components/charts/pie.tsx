@@ -7,36 +7,47 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { birad: "b1", accuracy: 60, fill: "var(--color-b1)" },
-  { birad: "b3", accuracy: 20, fill: "var(--color-b3)" },
-  { birad: "b4", accuracy: 10, fill: "var(--color-b4)" },
-  { birad: "b5", accuracy: 10, fill: "var(--color-b5)" },
-];
+import { Birads } from "@/lib/type";
+import { useEffect, useState } from "react";
 
 const chartConfig = {
   accuracy: {
     label: "Accuracy (%)",
   },
-  b1: {
+  BIRADS1: {
     label: "Birads 1",
-    color: "hsl(var(--chart-1))",
   },
-  b3: {
+  BIRADS3: {
     label: "Birads 3",
-    color: "hsl(var(--chart-2))",
   },
-  b4: {
+  BIRADS4: {
     label: "Birads 4",
-    color: "hsl(var(--chart-3))",
   },
-  b5: {
+  BIRADS5: {
     label: "Birads 5",
-    color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig;
 
-export default function PieChartComponent() {
+export default function PieChartComponent({
+  chartData,
+  imgIdx,
+}: {
+  chartData: Birads;
+  imgIdx: number;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    // Find the index with the highest accuracy
+    const maxIndex = chartData.prediction.reduce(
+      (maxIdx, current, idx, array) =>
+        current.accuracy > array[maxIdx].accuracy ? idx : maxIdx,
+      0,
+    );
+
+    setActiveIndex(maxIndex);
+  }, []);
+
   return (
     <div className="flex-1 pb-0">
       <ChartContainer
@@ -46,12 +57,15 @@ export default function PieChartComponent() {
         <PieChart>
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <Pie
-            data={chartData}
+            data={chartData?.prediction.map((d, i) => ({
+              ...d,
+              fill: `hsl(var(--chart-${i + 1}))`,
+            }))}
             dataKey="accuracy"
             nameKey="birad"
             innerRadius={60}
             strokeWidth={5}
-            activeIndex={0}
+            activeIndex={activeIndex}
             activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
               <Sector {...props} outerRadius={outerRadius + 10} />
             )}
@@ -69,16 +83,16 @@ export default function PieChartComponent() {
                       <tspan
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground text-3xl font-bold"
+                        className="fill-foreground text-xl font-bold capitalize"
                       >
-                        60%
+                        {chartData?.highest}
                       </tspan>
                       <tspan
                         x={viewBox.cx}
                         y={(viewBox.cy || 0) + 24}
                         className="fill-muted-foreground"
                       >
-                        Image 1
+                        Image {imgIdx}
                       </tspan>
                     </text>
                   );
