@@ -1,46 +1,12 @@
 import { DataTable } from "@/components/data-table";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { User } from "@/lib/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { CirclePlus, MoreHorizontal } from "lucide-react";
 import { EditUser } from "../dialog/editUser";
 import { AddUser } from "../dialog/addUser";
 import { DeleteUser } from "../dialog/deleteUser";
-
-const result: User[] = [
-  {
-    id: "1",
-    email: "email@gmail.com",
-    name: "Fulan",
-    phone: "999",
-  },
-  {
-    id: "2",
-    email: "email@gmail.com",
-    name: "Fulan",
-    phone: "999",
-  },
-  {
-    id: "3",
-    email: "email@gmail.com",
-    name: "Fulan",
-    phone: "999",
-  },
-  {
-    id: "4",
-    email: "email@gmail.com",
-    name: "Fulan",
-    phone: "999",
-  },
-];
+import { useEffect, useState } from "react";
+import { api } from "@/utils/axios";
 
 const columns: ColumnDef<User>[] = [
   {
@@ -75,10 +41,22 @@ const columns: ColumnDef<User>[] = [
 ];
 
 export default function UserTable() {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    api
+      .get("/auth/user")
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <DataTable
       columns={columns}
-      data={result}
+      data={users}
       colName="name"
       placeholder="Search for name"
     >

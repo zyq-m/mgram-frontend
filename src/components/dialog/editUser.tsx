@@ -13,12 +13,6 @@ import UserForm from "../form";
 import { UserPen } from "lucide-react";
 
 export function EditUser(props: User) {
-  const { id } = props;
-
-  async function edit() {
-    console.log(id);
-  }
-
   return (
     <Dialog>
       <DialogTrigger>
@@ -31,12 +25,11 @@ export function EditUser(props: User) {
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <UserForm {...props} />
-        <DialogFooter>
-          <Button type="submit" onClick={edit}>
-            Save changes
-          </Button>
-        </DialogFooter>
+        <UserForm {...props} edit={true}>
+          <DialogFooter>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </UserForm>
       </DialogContent>
     </Dialog>
   );

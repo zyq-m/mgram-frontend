@@ -47,8 +47,9 @@ export type UploadFiles = {
 };
 
 export type Birads = {
+  id?: string;
   name: string;
-  prediction: PieBiards[];
+  biradPrediction: PieBiards[];
   highest: number;
 };
 
@@ -57,3 +58,7 @@ export type PieBiards = {
   accuracy: number;
   fill?: string;
 };
+
+export type PredictionResultDetail = {
+  images?: Birads[];
+} & PredictionResult;

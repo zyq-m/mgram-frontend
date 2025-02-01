@@ -14,45 +14,15 @@ import { MoreHorizontal } from "lucide-react";
 import dayjs from "dayjs";
 import FilterResult from "./resultFilter";
 import { Link } from "react-router";
-
-const result: PredictionResult[] = [
-  {
-    id: "1",
-    icNo: "01234567",
-    timestamp: dayjs().toString(),
-    result: "Birads 1",
-  },
-  {
-    id: "2",
-    icNo: "01234567",
-    timestamp: dayjs().toString(),
-    result: "Birads 1",
-  },
-  {
-    id: "3",
-    icNo: "01234567",
-    timestamp: dayjs().toString(),
-    result: "Birads 1",
-  },
-  {
-    id: "4",
-    icNo: "01234567",
-    timestamp: dayjs().toString(),
-    result: "Birads 1",
-  },
-  {
-    id: "5",
-    icNo: "01234567",
-    timestamp: dayjs().toString(),
-    result: "Birads 1",
-  },
-];
+import { useEffect, useState } from "react";
+import { api } from "@/utils/axios";
 
 export default function ResultTable({
   showResult = false,
 }: {
   showResult?: boolean;
 }) {
+  const [data, setData] = useState<PredictionResult[]>([]);
   const columns: ColumnDef<PredictionResult>[] = [
     {
       id: "no",
@@ -66,6 +36,7 @@ export default function ResultTable({
     {
       accessorKey: "timestamp",
       header: "Timestamp",
+      cell: ({ row }) => <div>{dayjs(row.original.timestamp).toString()}</div>,
     },
     showResult
       ? {
@@ -100,10 +71,16 @@ export default function ResultTable({
     },
   ];
 
+  useEffect(() => {
+    api.get("/predict").then((res) => {
+      setData(res.data);
+    });
+  }, []);
+
   return (
     <DataTable
       columns={columns}
-      data={result}
+      data={data}
       colName="icNo"
       placeholder="Search for IC No."
     >

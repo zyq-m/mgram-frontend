@@ -39,13 +39,14 @@ export default function PieChartComponent({
 
   useEffect(() => {
     // Find the index with the highest accuracy
-    const maxIndex = chartData.prediction.reduce(
+    const maxIndex = chartData.biradPrediction.reduce(
       (maxIdx, current, idx, array) =>
         current.accuracy > array[maxIdx].accuracy ? idx : maxIdx,
       0,
     );
 
     setActiveIndex(maxIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -57,7 +58,7 @@ export default function PieChartComponent({
         <PieChart>
           <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <Pie
-            data={chartData?.prediction.map((d, i) => ({
+            data={chartData?.biradPrediction.map((d, i) => ({
               ...d,
               fill: `hsl(var(--chart-${i + 1}))`,
             }))}

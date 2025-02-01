@@ -15,10 +15,12 @@ export default function CardPie({
   onAgain,
   action = false,
   data,
+  onSave,
 }: {
   onAgain?: () => void;
   action?: boolean;
-  data: Birads[];
+  data?: Birads[];
+  onSave?: () => void;
 }) {
   return (
     <Card>
@@ -26,7 +28,7 @@ export default function CardPie({
         <CardTitle>Result</CardTitle>
         <CardDescription>Prediction of mammogram images</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-w justify-evenly">
+      <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
         {data?.map((d, i) => (
           <PieChartComponent chartData={d} key={i} imgIdx={i + 1} />
         ))}
@@ -37,7 +39,7 @@ export default function CardPie({
             <RotateCcw />
             Try again
           </Button>
-          <Button>
+          <Button onClick={onSave}>
             <Bookmark />
             Save result
           </Button>

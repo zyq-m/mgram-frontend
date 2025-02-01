@@ -53,10 +53,33 @@ export default function Predict() {
     setLoading(false);
   }
 
+  async function onSave() {
+    try {
+      const fd = new FormData();
+      images.forEach((img) => {
+        fd.append(`birad_images`, img);
+      });
+      fd.append("ic_no", icNo);
+
+      await api.post("/predict/save", fd, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="space-y-8">
       <div className={showResult ? "block" : "hidden"}>
-        <CardPie data={pieData} action={true} onAgain={() => setShow(false)} />
+        <CardPie
+          data={pieData}
+          action={true}
+          onAgain={() => setShow(false)}
+          onSave={onSave}
+        />
       </div>
 
       <Card>

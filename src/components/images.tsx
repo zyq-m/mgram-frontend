@@ -1,7 +1,7 @@
 import { UploadFiles } from "@/lib/type";
 import { Label } from "./ui/label";
 
-export default function MamoImages({ files }: { files: UploadFiles[] }) {
+export default function MamoImages({ files }: { files?: UploadFiles[] }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {files?.map((d, i) => (

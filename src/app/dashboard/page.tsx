@@ -7,7 +7,6 @@ export default function Dashboard() {
     <div className="grid gap-8">
       {/* barchart */}
       <BarChartComponent />
-
       {/* list of prediction */}
       <Card>
         <CardHeader>

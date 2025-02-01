@@ -33,10 +33,10 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       const token = await renewToken();
 
-      sessionStorage.setItem("accessToken", token.data.accessToken);
+      sessionStorage.setItem("accessToken", token.data.access_token);
 
       api.defaults.headers.common["Authorization"] =
-        `Bearer ${token.data.accessToken}`;
+        `Bearer ${token.data.access_token}`;
 
       return api(originalRequest);
     }
