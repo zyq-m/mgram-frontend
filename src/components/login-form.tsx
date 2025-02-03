@@ -22,6 +22,9 @@ import {
 } from "./ui/form";
 import { api } from "@/utils/axios";
 import { useNavigate } from "react-router";
+import { useToast } from "@/hooks/use-toast";
+import { AxiosError } from "axios";
+import { Toaster } from "./ui/toaster";
 
 export function LoginForm({
   className,
@@ -35,6 +38,7 @@ export function LoginForm({
       password: "",
     },
   });
+  const { toast } = useToast();
 
   async function onLogin(data: z.infer<typeof loginSchema>) {
     api
@@ -47,8 +51,12 @@ export function LoginForm({
 
         navigate("/app/home");
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((error: AxiosError) => {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.response?.data.message,
+        });
       });
   }
 
@@ -104,6 +112,7 @@ export function LoginForm({
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </div>
+      <Toaster />
     </div>
   );
 }

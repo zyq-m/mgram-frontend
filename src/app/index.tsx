@@ -8,6 +8,7 @@ import { Navigate, Outlet } from "react-router";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthUser, ProtectedRouteProps } from "@/lib/type";
+import ChangePassword from "./change-password";
 
 export default {
   LoginPage,
@@ -16,6 +17,7 @@ export default {
   Result,
   ResultDetails,
   AdminDashboard,
+  ChangePassword,
 };
 
 export function ProtectedRoute({

@@ -22,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
           <Route element={<ProtectedRoute allowed={["USER", "ADMIN"]} />}>
             <Route path="app/result" element={<App.Result />} />
             <Route path="app/result/:id" element={<App.ResultDetails />} />
+            <Route path="app/password" element={<App.ChangePassword />} />
           </Route>
           <Route
             element={

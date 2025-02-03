@@ -25,3 +25,20 @@ export const userSchema = z.object({
       message: "Invalid phone number format",
     }),
 });
+
+export const passwordSchema = z
+  .object({
+    oldPass: z.string().min(5, {
+      message: "Please input password",
+    }),
+    newPass: z.string().min(8, {
+      message: "Minimum 8 characters",
+    }),
+    rePass: z.string().min(8, {
+      message: "Minimum 8 characters",
+    }),
+  })
+  .refine((data) => data.newPass === data.rePass, {
+    message: "Passwords don't match",
+    path: ["rePass"],
+  });
