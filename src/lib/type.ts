@@ -15,6 +15,10 @@ export type PredictionResult = {
   timestamp: string;
   icNo: string;
   result?: string;
+  user?: {
+    name: string;
+    email: string;
+  };
 };
 
 export type User = {
@@ -67,4 +71,16 @@ export type BarBirads = {
   birad: string;
   count: number;
   fill?: string;
+};
+
+export type ProtectedRouteProps = {
+  redirect?: string;
+  allowed: string[];
+};
+
+export type AuthUser = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
 };

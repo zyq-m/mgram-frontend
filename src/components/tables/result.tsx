@@ -10,7 +10,7 @@ import {
 
 import { PredictionResult } from "@/lib/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import FilterResult from "./resultFilter";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
@@ -32,11 +32,32 @@ export default function ResultTable({
     },
     {
       accessorKey: "icNo",
-      header: "IC Number",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+        >
+          IC No.
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "user",
+      header: "Perform by",
+      cell: ({ row }) => <div>{row.original.user?.email}</div>,
     },
     {
       accessorKey: "timestamp",
-      header: "Timestamp",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+        >
+          Timestamp
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
     },
     showResult
       ? {

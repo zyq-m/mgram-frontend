@@ -7,6 +7,7 @@ import AdminDashboard from "./admin/dashboard";
 import { Navigate, Outlet } from "react-router";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { AuthUser, ProtectedRouteProps } from "@/lib/type";
 
 export default {
   LoginPage,
@@ -15,18 +16,6 @@ export default {
   Result,
   ResultDetails,
   AdminDashboard,
-};
-
-type ProtectedRouteProps = {
-  redirect?: string;
-  allowed: string[];
-};
-
-type AuthUser = {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
 };
 
 export function ProtectedRoute({
@@ -51,8 +40,6 @@ export function ProtectedRoute({
   if (!allowed.includes(auth?.role)) {
     return <Navigate to={redirect} replace />;
   }
-
-  console.log(!allowed.includes(auth?.role));
 
   return <Outlet />;
 }
