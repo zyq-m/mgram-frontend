@@ -9,7 +9,7 @@ export default function Result() {
           <CardTitle>List of Result</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResultTable showResult={true} />
+          <ResultTable />
         </CardContent>
       </Card>
     </div>

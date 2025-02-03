@@ -27,7 +27,7 @@ export type User = {
 export type NavUserProps = {
   name: string;
   email: string;
-  avatar: string;
+  avatar?: string;
 };
 
 export type NavLinkProps = {
@@ -62,3 +62,9 @@ export type PieBiards = {
 export type PredictionResultDetail = {
   images?: Birads[];
 } & PredictionResult;
+
+export type BarBirads = {
+  birad: string;
+  count: number;
+  fill?: string;
+};

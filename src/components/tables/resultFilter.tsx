@@ -1,11 +1,4 @@
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -18,7 +11,11 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Label } from "../ui/label";
 
-export default function FilterResult() {
+export default function FilterResult({
+  onDate,
+}: {
+  onDate: (date?: Date) => void;
+}) {
   const [date, setDate] = useState<Date>();
 
   return (
@@ -56,25 +53,11 @@ export default function FilterResult() {
               </PopoverContent>
             </Popover>
           </div>
-          {/* Category */}
-          <div>
-            <Label>Category</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Pick one" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
 
         <div className="flex gap-1 justify-end mt-4">
           <Button variant="outline">Clear</Button>
-          <Button>Apply</Button>
+          <Button onClick={() => onDate(date)}>Apply</Button>
         </div>
       </PopoverContent>
     </Popover>

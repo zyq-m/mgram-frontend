@@ -11,11 +11,11 @@ import {
 import { PredictionResult } from "@/lib/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import dayjs from "dayjs";
 import FilterResult from "./resultFilter";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/utils/axios";
+import dayjs from "dayjs";
 
 export default function ResultTable({
   showResult = false,
@@ -23,6 +23,7 @@ export default function ResultTable({
   showResult?: boolean;
 }) {
   const [data, setData] = useState<PredictionResult[]>([]);
+  const [date, setDate] = useState<string>("");
   const columns: ColumnDef<PredictionResult>[] = [
     {
       id: "no",
@@ -36,7 +37,6 @@ export default function ResultTable({
     {
       accessorKey: "timestamp",
       header: "Timestamp",
-      cell: ({ row }) => <div>{dayjs(row.original.timestamp).toString()}</div>,
     },
     showResult
       ? {
@@ -72,10 +72,10 @@ export default function ResultTable({
   ];
 
   useEffect(() => {
-    api.get("/predict").then((res) => {
+    api.get("/predict", { params: { timestamp: date } }).then((res) => {
       setData(res.data);
     });
-  }, []);
+  }, [date]);
 
   return (
     <DataTable
@@ -84,7 +84,7 @@ export default function ResultTable({
       colName="icNo"
       placeholder="Search for IC No."
     >
-      <FilterResult />
+      <FilterResult onDate={(d) => setDate(dayjs(d).format("YYYY-MM-DD"))} />
     </DataTable>
   );
 }

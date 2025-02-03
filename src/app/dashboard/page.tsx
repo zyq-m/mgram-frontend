@@ -4,10 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Dashboard() {
   return (
-    <div className="grid gap-8">
-      {/* barchart */}
+    <div className="space-y-4">
       <BarChartComponent />
-      {/* list of prediction */}
       <Card>
         <CardHeader>
           <CardTitle>List of recent prediction</CardTitle>

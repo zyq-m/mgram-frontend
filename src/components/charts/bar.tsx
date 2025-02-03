@@ -13,36 +13,47 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { birads: "Birad 1", prediction: 6, fill: "var(--color-birads1)" },
-  { birads: "Birad 3", prediction: 2, fill: "var(--color-birads3)" },
-  { birads: "Birad 4", prediction: 6, fill: "var(--color-birads4)" },
-  { birads: "Birad 5", prediction: 6, fill: "var(--color-birads5)" },
-];
+import { BarBirads } from "@/lib/type";
+import { api } from "@/utils/axios";
+import { useEffect, useState } from "react";
 
 const chartConfig = {
-  prediction: {
+  count: {
     label: "Prediction",
   },
-  birads1: {
+  BIRADS1: {
     label: "Birads 1",
-    color: "hsl(var(--chart-1))",
   },
-  birads3: {
+  BIRADS3: {
     label: "Birads 3",
-    color: "hsl(var(--chart-2))",
   },
-  birads4: {
+  BIRADS4: {
     label: "Birads 4",
-    color: "hsl(var(--chart-3))",
   },
-  birads5: {
+  BIRADS5: {
     label: "Birads 5",
-    color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig;
 
 export default function BarChartComponent() {
+  const [chartData, setChartData] = useState<BarBirads[] | []>([]);
+
+  useEffect(() => {
+    api
+      .get("/predict/chart")
+      .then((res) => {
+        setChartData(
+          res.data.map((d: BarBirads, i: number) => ({
+            ...d,
+            fill: `hsl(var(--chart-${i}))`,
+          })),
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Card>
       <CardHeader>
@@ -50,8 +61,11 @@ export default function BarChartComponent() {
         <CardDescription>Last 24 Hours</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+        <ChartContainer
+          config={chartConfig}
+          className="min-h-[200px] max-h-96 w-full"
+        >
+          <BarChart barSize={100} accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="birads"
@@ -60,7 +74,7 @@ export default function BarChartComponent() {
               axisLine={false}
             />
             <YAxis
-              dataKey="prediction"
+              dataKey="count"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -69,7 +83,7 @@ export default function BarChartComponent() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="prediction" radius={8} />
+            <Bar dataKey="count" radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>

@@ -15,6 +15,7 @@ import CardPie from "@/components/charts/cardPie";
 import { api } from "@/utils/axios";
 import { Birads } from "@/lib/type";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Predict() {
   const [showResult, setShow] = useState(false);
@@ -23,6 +24,7 @@ export default function Predict() {
   const [icNo, setIcNo] = useState<string>("");
   const [pieData, setData] = useState<Birads[] | []>([]);
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   async function onPredict() {
     try {
@@ -65,6 +67,11 @@ export default function Predict() {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+      });
+
+      toast({
+        title: "Success",
+        description: "Prediction result was successfully saved",
       });
     } catch (error) {
       console.log(error);

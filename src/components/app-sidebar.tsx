@@ -13,6 +13,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router";
+import { jwtDecode } from "jwt-decode";
+import { NavUserProps } from "@/lib/type";
 
 const data = {
   user: {
@@ -40,6 +42,16 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [user, setUser] = React.useState<NavUserProps | null>(null);
+
+  React.useEffect(() => {
+    const { sub } = jwtDecode(sessionStorage.getItem("accessToken") ?? "");
+    setUser({
+      email: sub?.email ?? "",
+      name: sub?.name ?? "",
+    });
+  }, []);
+
   return (
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
@@ -65,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

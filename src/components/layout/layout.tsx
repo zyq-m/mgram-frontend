@@ -14,6 +14,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout() {
   return (
@@ -42,6 +43,7 @@ export default function RootLayout() {
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <Outlet />
         </div>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );
