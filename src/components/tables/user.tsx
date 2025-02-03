@@ -53,6 +53,7 @@ export default function UserTable() {
         console.log(err);
       });
   }, []);
+
   return (
     <DataTable
       columns={columns}

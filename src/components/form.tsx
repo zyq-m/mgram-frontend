@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ReactNode, useEffect } from "react";
 import { api } from "@/utils/axios";
+import { useToast } from "@/hooks/use-toast";
 
 export default function UserForm(
   props?: User & {
@@ -27,15 +28,25 @@ export default function UserForm(
     resolver: zodResolver(userSchema),
   });
 
+  const { toast } = useToast();
+
   const onSubmit = async (data: User) => {
     try {
+      let message: string = "";
       if (props?.edit) {
         const user = await api.put(`/auth/user/${props?.id}`, data);
+        message = user.data.message;
       }
 
       if (props?.add) {
         const user = await api.post("/auth/user", data);
+        message = user.data.message;
       }
+
+      toast({
+        title: "Success",
+        description: message,
+      });
     } catch (error) {
       console.log(error);
     }
