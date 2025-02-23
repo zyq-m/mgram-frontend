@@ -49,7 +49,7 @@ export function LoginForm({
         sessionStorage.setItem("accessToken", access_token);
         sessionStorage.setItem("refreshToken", refresh_token);
 
-        navigate("/app/home");
+        navigate("/app/dashboard");
       })
       .catch((error: AxiosError) => {
         toast({

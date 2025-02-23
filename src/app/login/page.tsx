@@ -1,4 +1,4 @@
-import { GalleryVerticalEnd } from "lucide-react";
+import { Activity } from "lucide-react";
 
 import { LoginForm } from "@/components/login-form";
 
@@ -8,7 +8,7 @@ export default function LoginPage() {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <a href="#" className="flex items-center gap-2 self-center font-medium">
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-slate-50 dark:bg-slate-50 dark:text-slate-900">
-            <GalleryVerticalEnd className="size-4" />
+            <Activity className="size-4" />
           </div>
           Mgram.net
         </a>
