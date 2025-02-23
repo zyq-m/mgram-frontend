@@ -10,7 +10,7 @@ export default function LoginPage() {
           <div className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-slate-50 dark:bg-slate-50 dark:text-slate-900">
             <GalleryVerticalEnd className="size-4" />
           </div>
-          Acme Inc.
+          Mgram.net
         </a>
         <LoginForm />
       </div>

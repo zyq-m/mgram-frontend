@@ -9,24 +9,53 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRef, useState } from "react";
 import CardPie from "@/components/charts/cardPie";
 import { api } from "@/utils/axios";
 import { Birads } from "@/lib/type";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const predictSchema = z.object({
+  icNo: z
+    .string()
+    .min(12, "IC Number must be 12 characters")
+    .max(12, "IC Number must be 12 characters"),
+});
 
 export default function Predict() {
   const [showResult, setShow] = useState(false);
   const resultRef = useRef<HTMLDivElement | null>(null);
   const [images, setImages] = useState<File[] | []>([]);
-  const [icNo, setIcNo] = useState<string>("");
   const [pieData, setData] = useState<Birads[] | []>([]);
   const [loading, setLoading] = useState(false);
+  const [save, setSave] = useState(false);
   const { toast } = useToast();
+  const form = useForm<z.infer<typeof predictSchema>>({
+    resolver: zodResolver(predictSchema),
+  });
 
-  async function onPredict() {
+  async function onPredict(data: z.infer<typeof predictSchema>) {
+    if (images.length !== 4) {
+      toast({
+        title: "Error",
+        description: "Please upload atleat 4 images",
+        variant: "destructive",
+      });
+
+      return;
+    }
     try {
       setLoading(true);
 
@@ -34,7 +63,7 @@ export default function Predict() {
       images.forEach((img) => {
         fd.append(`birad_images`, img);
       });
-      fd.append("ic_no", icNo);
+      fd.append("ic_no", data.icNo);
 
       const res = await api.post("/predict", fd, {
         headers: {
@@ -56,12 +85,13 @@ export default function Predict() {
   }
 
   async function onSave() {
+    setSave(true);
     try {
       const fd = new FormData();
       images.forEach((img) => {
         fd.append(`birad_images`, img);
       });
-      fd.append("ic_no", icNo);
+      fd.append("ic_no", form.getValues("icNo"));
 
       await api.post("/predict/save", fd, {
         headers: {
@@ -76,6 +106,7 @@ export default function Predict() {
     } catch (error) {
       console.log(error);
     }
+    setSave(false);
   }
 
   return (
@@ -84,44 +115,60 @@ export default function Predict() {
         <CardPie
           data={pieData}
           action={true}
-          onAgain={() => setShow(false)}
+          onAgain={() => {
+            window.location.reload();
+          }}
           onSave={onSave}
+          loading={save}
         />
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Prediction</CardTitle>
-          <CardDescription>
-            Upload images of mammogram to start your prediction
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Dropzone sendFiles={(files) => setImages(files)} />
-          <div>
-            <Label htmlFor="icNo">IC No.</Label>
-            <Input
-              id="icNo"
-              placeholder="0123456789"
-              value={icNo}
-              onChange={(e) => setIcNo(e.target.value)}
-            />
-          </div>
-        </CardContent>
-        <CardFooter className="gap-2 justify-end">
-          <Button variant="outline">Clear</Button>
-          <Button onClick={onPredict} disabled={loading}>
-            {loading ? (
-              <>
-                <Loader2 className="animate-spin" />
-                Please wait
-              </>
-            ) : (
-              "Predict"
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onPredict)} className="space-y-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Prediction</CardTitle>
+              <CardDescription>
+                Upload images of mammogram to start your prediction
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Dropzone sendFiles={(files) => setImages(files)} />
+              <FormField
+                control={form.control}
+                name="icNo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>IC No.</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="012345678901"
+                        maxLength={12}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+            <CardFooter className="gap-2 justify-end">
+              <Button type="reset" variant="outline">
+                Clear
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  "Predict"
+                )}
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
+      </Form>
     </div>
   );
 }

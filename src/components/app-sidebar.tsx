@@ -22,7 +22,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: [
       {
         title: "Dashboard",
-        url: "home",
+        url: "dashboard",
         icon: Gauge,
       },
       {
@@ -51,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         navMain: [
           {
             title: "Dashboard",
-            url: "admin/home",
+            url: "admin/dashboard",
             icon: Gauge,
           },
           {

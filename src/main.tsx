@@ -13,10 +13,13 @@ createRoot(document.getElementById("root")!).render(
         <Route element={<RootLayout />}>
           <Route
             element={
-              <ProtectedRoute allowed={["USER"]} redirect="/app/admin/home" />
+              <ProtectedRoute
+                allowed={["USER"]}
+                redirect="/app/admin/dashboard"
+              />
             }
           >
-            <Route path="app/home" element={<App.Dashboard />} />
+            <Route path="app/dashboard" element={<App.Dashboard />} />
             <Route path="app/predict" element={<App.Predict />} />
           </Route>
           <Route element={<ProtectedRoute allowed={["USER", "ADMIN"]} />}>
@@ -26,10 +29,13 @@ createRoot(document.getElementById("root")!).render(
           </Route>
           <Route
             element={
-              <ProtectedRoute allowed={["ADMIN"]} redirect="/app/home" />
+              <ProtectedRoute allowed={["ADMIN"]} redirect="/app/dashboard" />
             }
           >
-            <Route path="app/admin/home" element={<App.AdminDashboard />} />
+            <Route
+              path="app/admin/dashboard"
+              element={<App.AdminDashboard />}
+            />
           </Route>
         </Route>
       </Routes>

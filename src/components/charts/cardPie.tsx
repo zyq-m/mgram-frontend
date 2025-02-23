@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import PieChartComponent from "./pie";
 import { Button } from "../ui/button";
-import { Bookmark, RotateCcw } from "lucide-react";
+import { Bookmark, Loader2, RotateCcw } from "lucide-react";
 import { Birads } from "@/lib/type";
 
 export default function CardPie({
@@ -16,11 +16,13 @@ export default function CardPie({
   action = false,
   data,
   onSave,
+  loading = false,
 }: {
   onAgain?: () => void;
   action?: boolean;
   data?: Birads[];
   onSave?: () => void;
+  loading: boolean;
 }) {
   return (
     <Card>
@@ -39,9 +41,18 @@ export default function CardPie({
             <RotateCcw />
             Try again
           </Button>
-          <Button onClick={onSave}>
-            <Bookmark />
-            Save result
+          <Button type="submit" disabled={loading} onClick={onSave}>
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin" />
+                Please wait
+              </>
+            ) : (
+              <>
+                <Bookmark />
+                Save result
+              </>
+            )}
           </Button>
         </CardFooter>
       )}
